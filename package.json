@@ -1,0 +1,34 @@
+{
+  "name": "llm-circuit-breaker",
+  "version": "0.1.0",
+  "description": "A circuit breaker for LLM calls. Stops runaway loops and enforces token budgets.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "examples:basic": "npm run build && node dist/examples/basic-chat.js",
+    "examples:runaway": "npm run build && node dist/examples/runaway-loop.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
