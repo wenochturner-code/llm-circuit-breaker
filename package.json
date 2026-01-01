@@ -1,5 +1,5 @@
 {
-  "name": "llm-execution-budget",
+  "name": "llm-execution-guard",
   "version": "0.2.0",
   "description": "Minimal control-plane primitive for limiting LLM execution costs.",
   "license": "MIT",
