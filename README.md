@@ -1,15 +1,15 @@
-# LLM Execution Budget SDK
+# LLM Execution Guard SDK
 
 Minimal control-plane primitive for limiting LLM execution costs.
 
 ## Install
 ```bash
-npm install llm-budget-sdk
+npm install llm-execution-guard
 ```
 
 ## API
 ```typescript
-import { createBudget, guardedResponse, isBudgetError } from "llm-budget-sdk";
+import { createBudget, guardedResponse, isBudgetError } from "llm-execution-guard";
 ```
 
 ### createBudget(limits, now?)
