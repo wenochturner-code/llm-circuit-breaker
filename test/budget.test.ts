@@ -631,4 +631,52 @@ describe("Budget SDK", () => {
       assert.strictEqual(e.snapshot.tokensUsed, 600);
     }
   });
+
+  // ===========================================
+  // API COMPATIBILITY TESTS
+  // ===========================================
+
+  // Chat Completions API: clamps max_tokens, does NOT inject max_output_tokens
+  test("clamps output tokens for chat params using max_tokens", async () => {
+    const budget = createBudget({
+      maxSteps: 5,
+      maxToolCalls: 10,
+      timeoutMs: 10000,
+      maxOutputTokens: 7,
+      maxTokens: 10000,
+    });
+    let seen: any;
+    await guardedResponse(
+      budget,
+      { model: "x", messages: [{ role: "user", content: "hi" }], max_tokens: 1000 } as any,
+      async (p) => {
+        seen = p;
+        return { usage: { total_tokens: 1 } } as any;
+      }
+    );
+    assert.strictEqual(seen.max_tokens, 7);
+    assert.strictEqual(seen.max_output_tokens, undefined);
+  });
+
+  // Responses API: clamps max_output_tokens, does NOT inject max_tokens
+  test("clamps output tokens for responses params using max_output_tokens", async () => {
+    const budget = createBudget({
+      maxSteps: 5,
+      maxToolCalls: 10,
+      timeoutMs: 10000,
+      maxOutputTokens: 7,
+      maxTokens: 10000,
+    });
+    let seen: any;
+    await guardedResponse(
+      budget,
+      { model: "x", input: [{ role: "user", content: "hi" }], max_output_tokens: 1000 } as any,
+      async (p) => {
+        seen = p;
+        return { usage: { total_tokens: 1 } } as any;
+      }
+    );
+    assert.strictEqual(seen.max_output_tokens, 7);
+    assert.strictEqual(seen.max_tokens, undefined);
+  });
 });

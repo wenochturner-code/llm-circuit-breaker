@@ -59,14 +59,26 @@ export async function guardedResponse<P extends ResponseParams, R extends Respon
   // All checks passed, increment step count before calling fn
   state.stepsUsed++;
 
-  // Clamp max_output_tokens
-  const modifiedParams = {
-    ...params,
-    max_output_tokens: Math.min(
-      params.max_output_tokens ?? Infinity,
-      limits.maxOutputTokens
-    ),
-  } as P;
+  // Clamp output tokens based on API type
+  // Chat Completions uses `messages` + `max_tokens`
+  // Responses API uses `input` + `max_output_tokens`
+  const isChat = "messages" in params;
+
+  const modifiedParams = isChat
+    ? {
+        ...params,
+        max_tokens: Math.min(
+          (params as any).max_tokens ?? Infinity,
+          limits.maxOutputTokens
+        ),
+      } as P
+    : {
+        ...params,
+        max_output_tokens: Math.min(
+          params.max_output_tokens ?? Infinity,
+          limits.maxOutputTokens
+        ),
+      } as P;
 
   // Call fn (if it throws, step is still consumed)
   const response = await fn(modifiedParams);
