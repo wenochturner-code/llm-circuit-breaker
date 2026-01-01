@@ -17,11 +17,12 @@
     "README.md",
     "LICENSE"
   ],
-  "scripts": {
-    "build": "tsc",
-    "test": "tsx --test",
-    "prepublishOnly": "npm run test && npm run build"
-  },
+   "scripts": {
+  "build": "tsc",
+  "test": "tsx --test test/*.test.ts",
+  "prepublishOnly": "npm run test && npm run build"
+},
+
   "devDependencies": {
     "tsx": "^4.21.0",
     "typescript": "^5.0.0"
